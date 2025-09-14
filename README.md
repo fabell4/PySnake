@@ -6,3 +6,4 @@ https://www.udemy.com/course/100-days-of-code/
 
 The game was originally developed using turtle graphics. 
 I have modified the game to use the Pygame library for better performance and graphics within a web browser.
+Tap and swipe controls were also added to support play onm a mobile device

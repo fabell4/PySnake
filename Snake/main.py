@@ -3,6 +3,7 @@ import sys
 from snake import Snake
 from food import Food
 from scoreboard import Scoreboard
+from controls import Controls
 
 # Initialize Pygame
 pygame.init()
@@ -26,6 +27,7 @@ small_font = pygame.font.Font(None, 24)
 snake = Snake()
 food = Food()
 scoreboard = Scoreboard()
+controls = Controls(SCREEN_WIDTH, SCREEN_HEIGHT)
 
 # Game state
 game_is_on = True
@@ -37,22 +39,11 @@ while game_is_on:
         if event.type == pygame.QUIT:
             game_is_on = False
         elif event.type == pygame.KEYDOWN:
-            if not game_over:
-                if event.key == pygame.K_UP:
-                    snake.up()
-                elif event.key == pygame.K_DOWN:
-                    snake.down()
-                elif event.key == pygame.K_LEFT:
-                    snake.left()
-                elif event.key == pygame.K_RIGHT:
-                    snake.right()
-            else:
-                # Restart game on any key press when game over
-                if event.key == pygame.K_SPACE:
-                    game_over = False
-                    scoreboard.reset()
-                    snake.reset()
-                    food.refresh()
+            game_over = controls.handle_keyboard_input(event, snake, game_over, (scoreboard, snake, food))
+        elif event.type == pygame.FINGERDOWN:
+            controls.handle_touch_down(event, game_over)
+        elif event.type == pygame.FINGERUP:
+            game_over = controls.handle_touch_up(event, snake, game_over, (scoreboard, snake, food))
 
     if not game_over:
         # Move snake
