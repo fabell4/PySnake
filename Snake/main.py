@@ -1,5 +1,5 @@
 import pygame
-import time
+import sys
 from snake import Snake
 from food import Food
 from scoreboard import Scoreboard
@@ -18,45 +18,59 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("My Snake Game")
 clock = pygame.time.Clock()
 
+# Font for game over message
+font = pygame.font.Font(None, 48)
+small_font = pygame.font.Font(None, 24)
+
 # Create game objects
 snake = Snake()
 food = Food()
 scoreboard = Scoreboard()
 
-# Game loop
+# Game state
 game_is_on = True
+game_over = False
+
+# Game loop
 while game_is_on:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_is_on = False
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
-                snake.up()
-            elif event.key == pygame.K_DOWN:
-                snake.down()
-            elif event.key == pygame.K_LEFT:
-                snake.left()
-            elif event.key == pygame.K_RIGHT:
-                snake.right()
+            if not game_over:
+                if event.key == pygame.K_UP:
+                    snake.up()
+                elif event.key == pygame.K_DOWN:
+                    snake.down()
+                elif event.key == pygame.K_LEFT:
+                    snake.left()
+                elif event.key == pygame.K_RIGHT:
+                    snake.right()
+            else:
+                # Restart game on any key press when game over
+                if event.key == pygame.K_SPACE:
+                    game_over = False
+                    scoreboard.reset()
+                    snake.reset()
+                    food.refresh()
 
-    # Move snake
-    snake.move()
+    if not game_over:
+        # Move snake
+        snake.move()
 
-    # Check collision with food
-    if snake.check_food_collision(food):
-        food.refresh()
-        snake.extend()
-        scoreboard.increase_score()
+        # Check collision with food
+        if snake.check_food_collision(food):
+            food.refresh()
+            snake.extend()
+            scoreboard.increase_score()
 
-    # Check wall collision
-    if snake.check_wall_collision(SCREEN_WIDTH, SCREEN_HEIGHT):
-        scoreboard.reset()
-        snake.reset()
+        # Check wall collision
+        if snake.check_wall_collision(SCREEN_WIDTH, SCREEN_HEIGHT):
+            game_over = True
 
-    # Check self collision
-    if snake.check_self_collision():
-        scoreboard.reset()
-        snake.reset()
+        # Check self collision
+        if snake.check_self_collision():
+            game_over = True
 
     # Draw everything
     screen.fill(BACKGROUND_COLOR)
@@ -64,7 +78,20 @@ while game_is_on:
     food.draw(screen)
     scoreboard.draw(screen)
 
+    # Draw game over message
+    if game_over:
+        game_over_text = font.render("GAME OVER", True, (255, 0, 0))
+        restart_text = small_font.render("Press SPACE to restart", True, (255, 255, 255))
+
+        # Center the text
+        game_over_rect = game_over_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+        restart_rect = restart_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50))
+
+        screen.blit(game_over_text, game_over_rect)
+        screen.blit(restart_text, restart_rect)
+
     pygame.display.flip()
     clock.tick(FPS)
 
 pygame.quit()
+sys.exit()

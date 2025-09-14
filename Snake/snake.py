@@ -12,6 +12,7 @@ class Snake:
         self.create_snake()
         self.head = self.segments[0]
         self.heading = RIGHT
+        self.collision_detected = False
 
     def create_snake(self):
         for position in [(0, 0), (-20, 0), (-40, 0)]:
@@ -53,19 +54,31 @@ class Snake:
         self.head['rect'].y = self.head['y']
 
     def up(self):
-        if self.heading != DOWN:
+        if self.heading == DOWN and len(self.segments) > 1:
+            # Trying to double back - this should cause game over
+            self.collision_detected = True
+        elif self.heading != DOWN:
             self.heading = UP
 
     def down(self):
-        if self.heading != UP:
+        if self.heading == UP and len(self.segments) > 1:
+            # Trying to double back - this should cause game over
+            self.collision_detected = True
+        elif self.heading != UP:
             self.heading = DOWN
 
     def left(self):
-        if self.heading != RIGHT:
+        if self.heading == RIGHT and len(self.segments) > 1:
+            # Trying to double back - this should cause game over
+            self.collision_detected = True
+        elif self.heading != RIGHT:
             self.heading = LEFT
 
     def right(self):
-        if self.heading != LEFT:
+        if self.heading == LEFT and len(self.segments) > 1:
+            # Trying to double back - this should cause game over
+            self.collision_detected = True
+        elif self.heading != LEFT:
             self.heading = RIGHT
 
     def check_food_collision(self, food):
@@ -76,8 +89,14 @@ class Snake:
                 self.head['y'] < 0 or self.head['y'] >= screen_height)
 
     def check_self_collision(self):
+        # Check for double-back collision first
+        if self.collision_detected:
+            return True
+
+        # Check if head collides with any body segment
+        head_rect = self.head['rect']
         for segment in self.segments[1:]:
-            if self.head['rect'].colliderect(segment['rect']):
+            if head_rect.colliderect(segment['rect']):
                 return True
         return False
 
@@ -86,6 +105,7 @@ class Snake:
         self.create_snake()
         self.head = self.segments[0]
         self.heading = RIGHT
+        self.collision_detected = False
 
     def draw(self, screen):
         for segment in self.segments:
