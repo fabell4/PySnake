@@ -10,7 +10,7 @@ pygame.init()
 
 # Constants
 SCREEN_WIDTH = 600
-SCREEN_HEIGHT = 600
+SCREEN_HEIGHT = 800
 BACKGROUND_COLOR = (0, 0, 0)
 FPS = 10
 
@@ -59,7 +59,7 @@ while game_is_on:
         if snake.check_wall_collision(SCREEN_WIDTH, SCREEN_HEIGHT):
             game_over = True
 
-        # Check self collision
+        # Check self-collision
         if snake.check_self_collision():
             game_over = True
 

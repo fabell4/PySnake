@@ -1,0 +1,24 @@
+[build-system]
+requires = ["briefcase>=0.3.16"]
+build-backend = "briefcase"
+
+[tool.briefcase]
+project_name = "PySnake"
+bundle = "com.example"
+version = "0.1.0"
+description = "Snake game in Python for web browsers"
+sources = ["snake"]
+license = "MIT"
+
+[tool.briefcase.app.pysnake]
+formal_name = "PySnake"
+description = "Snake game playable in web browsers"
+sources = ["snake"]
+requires = [
+    "pygame-ce>=2.4.0",
+]
+
+[tool.briefcase.app.pysnake.web]
+system_requires = [
+    "pygame-ce>=2.4.0",
+]
