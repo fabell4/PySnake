@@ -1,6 +1,5 @@
 import asyncio
 import pygame
-import sys
 from snake import Snake
 from food import Food
 from scoreboard import Scoreboard
@@ -20,7 +19,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("My Snake Game")
 clock = pygame.time.Clock()
 
-# Font for game over message
+# Font for the game over message.
 font = pygame.font.Font(None, 48)
 small_font = pygame.font.Font(None, 24)
 
@@ -73,7 +72,7 @@ async def main():
         food.draw(screen)
         scoreboard.draw(screen)
 
-        # Draw game over message
+        # Draw the game over message
         if game_over:
             game_over_text = font.render("GAME OVER", True, (255, 0, 0))
             restart_text = small_font.render("Press SPACE to restart", True, (255, 255, 255))
