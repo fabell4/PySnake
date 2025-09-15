@@ -1,4 +1,4 @@
-# PySnake
+# PySnake/JSnake
 Snake in Python created for embedding in a website. 
 
 The project was part of the 100 Days of Python course on Udemy by Dr. Angela Yu. 
