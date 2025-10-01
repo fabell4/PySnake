@@ -1,5 +1,6 @@
 # PySnake/JSnake
 Snake in Python created for embedding in a website. 
+* embedding did not work, demo was refactored to javascrip tfor embedding
 
 The project was part of the 100 Days of Python course on Udemy by Dr. Angela Yu. 
 https://www.udemy.com/course/100-days-of-code/
